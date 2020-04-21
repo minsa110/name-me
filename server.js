@@ -76,11 +76,11 @@ server.listen(config.port, () => { // 2nd arg = success handler
 });
 
 // handle server-side routing, exposing API to litsen to certain routes
-server.get('/', (req, res) => {
-    // 1st arg: speficy route we're interested in, root (/) in this case
-    // 2nd arg: event handler
-        res.send('Hello Express!\n');
-});
+// server.get('/', (req, res) => {
+//     // 1st arg: speficy route we're interested in, root (/) in this case
+//     // 2nd arg: event handler
+//         res.send('Hello Express!\n');
+// });
 
 // test in terminal: npm start
     // can do that because in package.json:
@@ -108,7 +108,7 @@ server.get('/', (req, res) => {
 // });
 
 // --> simplify ^ using static middleware to automatically serve static assets like simple html pages
-server.use(express.static('public')); // ***
+// server.use(express.static('public')); // ***
 // '.use' to use middleware in Express
 // 'public' is where we want our static assets to be hosted on the file system
 // don't need to use 'fs' module
@@ -129,3 +129,32 @@ server.use('/api', apiRouter); // then use just like any other Express middlewar
 // 2nd arg: name
 
 // test by going to http://localhost:8080/api
+
+
+/*******************************************************/
+/***** 5. Using the EJS template language *****/
+/*******************************************************/
+// dynamic template language in html pages
+// EJS = embedded JavaScript
+// using it in this project to render front-end components
+// need to install as dependency: npm i -S ejs
+
+server.set('view engine', 'ejs'); // setup EJS to be used with Express ***
+// sets the view engine to be ejs
+// by default, Express looks for ejs template under 'views' folder in root
+// go to ./views/index.ejs
+    // ejs are html files with JavaScript embedded in them using <%= ... %>
+
+// render ejs template on root level
+// server.get('/', (req, res) => {
+//         res.render('index');
+//         // instead of: res.send('Hello Express!\n');
+// });
+// and instead of: server.use(express.static('public'));
+
+server.get('/', (req, res) => {
+    res.render('index', {
+        content: 'Hello Express and <b>EJS</b>!' // pass in a string as content
+        // use in ./views/index.ejs
+    });
+});

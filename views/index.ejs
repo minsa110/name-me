@@ -1,0 +1,30 @@
+<!-- ---------------------------------- -->
+<!-- 5. Using the EJS template language -->
+<!-- ---------------------------------- -->
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hello EJS</title>
+</head>
+<body>
+    <%- content %> -->
+    <!-- can use 'content' as a variable as passed in from ../server.js -->
+    <!-- <%= content %> is default denotation, doesn't take in html tags -->
+<!-- </body>
+</html> -->
+
+
+<!-- ----------------------------------------------------------------- -->
+<!-- 6. Using partial views in ejs to reduce redundancy and simplify ^ -->
+<!-- ----------------------------------------------------------------- -->
+
+<%- include('header') -%>
+<!-- ^ includes ./header.ejs -->
+
+    <%- content %>
+
+<%- include('footer') -%>
