@@ -65,15 +65,15 @@
 /***** 3. Creating server w/ Express *****/
 /*****************************************/
 
-import config from './config';
+// import config from './config';
 
-import express from 'express';
-const server = express(); // create server by invoking imported express variable as function
+// import express from 'express';
+// const server = express(); // create server by invoking imported express variable as function
 
-// listen to single request event
-server.listen(config.port, () => { // 2nd arg = success handler
-    console.info('Express listening on port: ', config.port);
-});
+// // listen to single request event
+// server.listen(config.port, () => { // 2nd arg = success handler
+//     console.info('Express listening on port: ', config.port);
+// });
 
 // handle server-side routing, exposing API to litsen to certain routes
 // server.get('/', (req, res) => {
@@ -123,23 +123,24 @@ server.listen(config.port, () => { // 2nd arg = success handler
 /*******************************************************/
 // for example, api folder (go to ./api/index.js)
 
-import apiRouter from './api'; // import
-server.use('/api', apiRouter); // then use just like any other Express middleware
+// import apiRouter from './api'; // import
+// server.use('/api', apiRouter); // then use just like any other Express middleware
 // 1st arg: route prefix
 // 2nd arg: name
 
 // test by going to http://localhost:8080/api
 
 
-/*******************************************************/
+/**********************************************/
 /***** 5. Using the EJS template language *****/
-/*******************************************************/
+/**********************************************/
+
 // dynamic template language in html pages
 // EJS = embedded JavaScript
 // using it in this project to render front-end components
 // need to install as dependency: npm i -S ejs
 
-server.set('view engine', 'ejs'); // setup EJS to be used with Express ***
+// server.set('view engine', 'ejs'); // setup EJS to be used with Express ***
 // sets the view engine to be ejs
 // by default, Express looks for ejs template under 'views' folder in root
 // go to ./views/index.ejs
@@ -152,9 +153,34 @@ server.set('view engine', 'ejs'); // setup EJS to be used with Express ***
 // });
 // and instead of: server.use(express.static('public'));
 
+// server.get('/', (req, res) => {
+//     res.render('index', {
+//         content: 'Hello Express and <b>EJS</b>!' // pass in a string as content
+//         // use in ./views/index.ejs
+//     });
+// });
+
+
+/*************************************************************/
+
+
+import config from './config';
+import apiRouter from './api';
+
+import express from 'express';
+const server = express();
+
+server.set('view engine', 'ejs');
+
 server.get('/', (req, res) => {
-    res.render('index', {
-        content: 'Hello Express and <b>EJS</b>!' // pass in a string as content
-        // use in ./views/index.ejs
-    });
+  res.render('index', {
+    content: '...'
+  });
+});
+
+server.use('/api', apiRouter);
+server.use(express.static('public'));
+
+server.listen(config.port, () => {
+  console.info('Express listening on port', config.port);
 });
