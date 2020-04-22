@@ -100,9 +100,9 @@ import ReactDOM from 'react-dom';
 // );
 
 
-/******************************************/
-/***** 9. Define a component PER file *****/
-/******************************************/
+/************************************************/
+/***** 9. Define a React component PER file *****/
+/************************************************/
 
 // single component files under ./components directory
 
