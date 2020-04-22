@@ -109,8 +109,25 @@ import ReactDOM from 'react-dom';
 import App from './components/App';
 
 // single responsibility: only renders top level component to the doc! :)
+// ReactDOM.render(
+//     <App />,
+//     // can pass in a variable, or 'props' in React components
+//     document.getElementById('root')
+// );
+
+/*******************************************/
+/***** 12. Loading data from directory *****/
+/*******************************************/
+
+// old way (before importing json)... don't need json-loader, since it's native in webpack now!
+    // npm i -S json-loader
+    // configure webpack json-loader in webpack.config.js
+    // restart webpack (npm run dev)
+
+import data from './testData';
+// console.log(data); // test to make sure we're reading the data directly from the json file
+
 ReactDOM.render(
-    <App />,
-    // can pass in a variable, or 'props' in React components
+    <App contests={data.contests} />, // pass data into the App component
     document.getElementById('root')
 );
