@@ -59,33 +59,70 @@ import Header from './Header';
 // 3. could get removed
 // can write code to invoke custom behaviors
 
-class App extends React.Component {
-        state = { 
-            pageHeader: 'Name Me! :)'
-         };
-         // one of the most important life cycle:
-         componentDidMount() {
-        // guarantees DOM has been mounted in the browser successfully
-        // integrate code w/ 3rd party plug-in that depends on the fact that the app HAS the DOM, insert integration code here
-        // ajax fetching, timers firing, event listeners usually done in here
-            //  console.log('did Mount');
-            //  debugger; // to debug in browser
-         }
-         componentWillUnmount() {
-        // comp. about to be unmounted
-        // clean timers, listeners
-            // console.log('will Unmount');
-         }
-        render() {
-            return (
-                <div className="App">
-                    <Header message={this.state.pageHeader} />
-                    <div>
-                        ...
-                    </div>
-                </div>
-            );
-        }
-    }
+// class App extends React.Component {
+//         state = { 
+//             pageHeader: 'Name Me! :)'
+//          };
+//          // one of the most important life cycle:
+//          componentDidMount() {
+//         // guarantees DOM has been mounted in the browser successfully
+//         // integrate code w/ 3rd party plug-in that depends on the fact that the app HAS the DOM, insert integration code here
+//         // ajax fetching, timers firing, event listeners usually done in here
+//             //  console.log('did Mount');
+//             //  debugger; // to debug in browser
+//          }
+//          componentWillUnmount() {
+//         // comp. about to be unmounted
+//         // clean timers, listeners
+//             // console.log('will Unmount');
+//          }
+//         render() {
+//             return (
+//                 <div className="App">
+//                     <Header message={this.state.pageHeader} />
+//                     <div>
+//                         ...
+//                     </div>
+//                 </div>
+//             );
+//         }
+//     }
     
-    export default App;
+//     export default App;
+
+
+/***********************************************************/
+/***** 13. Displaying loaded data as a list of objects *****/
+/***********************************************************/
+
+// create a new component to represent a single contest (i.e. create a file, ./ContestPreview.js)
+import ContestPreview from './ContestPreview';
+
+class App extends React.Component {
+    state = { 
+        pageHeader: 'Naming Contests!'
+     };
+     componentDidMount() {
+     }
+     componentWillUnmount() {
+     }
+    render() {
+        return (
+            <div className="App">
+                <Header message={this.state.pageHeader} />
+                <div>
+                    {/* <ContestPreview {...this.props.contests[0]} /> */}
+                        {/* ^ pass in first element in the array (array = this.props.contests) */}
+                        {/* ^ '...' = spread the object into the ContestPreview, so we get all properties for a contest on the first level */}
+
+                    {/* loop over all elements from ^ */}
+                    {this.props.contests.map(contest => // expose 'contest' object
+                        <ContestPreview {...contest} />
+                    )}
+                </div>
+            </div>
+        );
+    }
+}
+
+export default App;
