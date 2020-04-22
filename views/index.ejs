@@ -23,7 +23,6 @@
 <!-- ----------------------------------------------------------------- -->
 
 <%- include('header') -%>
-
-    <%- content %>
-
+    <div id="root"><%- content %></div>
+    <!-- ^ means render React (because id='root'), and if that does not exist, render default content -->
 <%- include('footer') -%>
