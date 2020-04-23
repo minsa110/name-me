@@ -16,9 +16,9 @@ const ContestPreview = (contest) => { // note: NOT ({ contest }) like in Header
 export default ContestPreview;
 
 
-/********************************/
-/***** 13. Make CSS changes *****/
-/********************************/
+/******************************************/
+/***** 14. Make CSS changes with Sass *****/
+/******************************************/
 
 // add classes above then ../../sass/style.scss
 
