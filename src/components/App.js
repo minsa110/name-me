@@ -96,13 +96,60 @@ import Header from './Header';
 /***********************************************************/
 
 // create a new component to represent a single contest (i.e. create a file, ./ContestPreview.js)
+// import ContestPreview from './ContestPreview';
+
+// class App extends React.Component {
+//     state = { 
+//         pageHeader: 'Naming Contests!'
+//      };
+//      componentDidMount() {
+//      }
+//      componentWillUnmount() {
+//      }
+//     render() {
+//         return (
+//             <div className="App">
+//                 <Header message={this.state.pageHeader} />
+//                 <div>
+//                     {/* <ContestPreview {...this.props.contests[0]} /> */}
+//                         {/* ^ pass in first element in the array (array = this.props.contests) */}
+//                         {/* ^ '...' = spread the object into the ContestPreview, so we get all properties for a contest on the first level */}
+
+//                     {/* loop over all elements from ^ */}
+//                     {this.props.contests.map(contest => // expose 'contest' object
+//                         <ContestPreview {...contest} />
+//                     )}
+//                 </div>
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+
+
+/**********************************************************/
+/***** 15. Handling data read in from API (continued) *****/
+/**********************************************************/
+
+// pros of having the data read directly from state:
+// - we can have a plan in working with any delay in fetching the data from API
+// - allows us to have control the list
+
 import ContestPreview from './ContestPreview';
+
+import data from '../testData'; // for testing purposes
 
 class App extends React.Component {
     state = { 
-        pageHeader: 'Naming Contests!'
+        pageHeader: 'Naming Contests!',
+        contests: [] // 1. render empty array of data (since might not be loaded from API yet)
      };
      componentDidMount() {
+         // 3. modify when data is accessible
+         this.setState({
+             contests: data.contests
+         });
      }
      componentWillUnmount() {
      }
@@ -111,13 +158,10 @@ class App extends React.Component {
             <div className="App">
                 <Header message={this.state.pageHeader} />
                 <div>
-                    {/* <ContestPreview {...this.props.contests[0]} /> */}
-                        {/* ^ pass in first element in the array (array = this.props.contests) */}
-                        {/* ^ '...' = spread the object into the ContestPreview, so we get all properties for a contest on the first level */}
-
-                    {/* loop over all elements from ^ */}
-                    {this.props.contests.map(contest => // expose 'contest' object
-                        <ContestPreview {...contest} />
+                    {this.state.contests.map(contest => // 2. read directly from the state instead of the props
+                        // when listing things dynamically in React, need to identify every element with a key
+                        <ContestPreview key={contest.id} {...contest} />
+                        // DO NOT to use array index as unique key
                     )}
                 </div>
             </div>

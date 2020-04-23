@@ -124,10 +124,25 @@ import App from './components/App';
     // configure webpack json-loader in webpack.config.js
     // restart webpack (npm run dev)
 
-import data from './testData';
+// import data from './testData';
 // console.log(data); // test to make sure we're reading the data directly from the json file
 
+// ReactDOM.render(
+//     <App contests={data.contests} />, // pass data into the App component
+//     document.getElementById('root')
+// );
+
+
+/**********************************************/
+/***** 15. Handling data read in from API *****/
+/**********************************************/
+
+// React will render first before data is loaded from API so create an empty array
 ReactDOM.render(
-    <App contests={data.contests} />, // pass data into the App component
+    // <App contests={[]} />, // empty array
+    // once React is loaded, update it with the loaded data in App.js
+    // but only thing that can be updated inside a component is the STATE of the component
+    // so... we'll render it from the state:
+    <App />, // remove it from here and do it in App.js --> state
     document.getElementById('root')
 );
