@@ -168,9 +168,21 @@
 
 import config from './config';
 import apiRouter from './api';
+import sassMiddleware from 'node-sass-middleware';
+import path from 'path'; // a built-in node module
 
 import express from 'express';
 const server = express();
+
+// to use sass...
+server.use(sassMiddleware({ // a function that takes an object
+    // specify configuration we want to work with this middleware
+    src: path.join(__dirname, 'sass'), // to read the sass files from (use path library to work with these directories)
+        // '__dirname' = starting from the current directory
+        // and joining the 'sass' folder
+    dest: path.join(__dirname, 'public') // to write the generated css
+}));
+// then go to header.ejs to add css stylesheet
 
 server.set('view engine', 'ejs');
 
