@@ -175,30 +175,70 @@ import ContestPreview from './ContestPreview';
 /***** 17. Use data from the React application *****/
 /***************************************************/
 
-import axios from 'axios';
+// import axios from 'axios';
+
+// class App extends React.Component {
+//     state = { 
+//         pageHeader: 'Naming Contests!',
+//         contests: []
+//      };
+//      componentDidMount() {
+//         // do an ajax request and fetch the data from the remote API
+//         // need library to do the ajax request
+//         // use axios: npm i -S axios
+//         // and import it above, then:
+//         axios.get('/api/contests') // specify the url for the API endpoint that we're going to read
+//         // ^ /api/contests, since on the same server for now
+//         .then(resp => { // axios is a promise base, so need to handle with 'then' method and 'cath' any errors
+//             // console.log(resp); // the response object 'resp' will have the data
+//             // ^ after testing, realized that contests data in: resp.data.contests, so:
+//             this.setState({
+//                 contests: resp.data.contests
+//             });
+//             // ^ data is now being loaded through an ajax request
+//             // and getting set on the React component state
+//         }) 
+//         .catch(console.error)
+//      }
+//      componentWillUnmount() {
+//      }
+//     render() {
+//         return (
+//             <div className="App">
+//                 <Header message={this.state.pageHeader} />
+//                 <div>
+//                     {this.state.contests.map(contest =>
+//                         <ContestPreview key={contest.id} {...contest} />
+//                     )}
+//                 </div>
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+
+
+/*************************************************************************************************************/
+/***** 19. Render React components on the server using fetched API data using the ReactDOMServer package *****/
+/*************************************************************************************************************/
 
 class App extends React.Component {
     state = { 
         pageHeader: 'Naming Contests!',
-        contests: []
+        contests: this.props.initialContests // this is actually same as before, since initialized as empty array in ../index.js
      };
      componentDidMount() {
-        // do an ajax request and fetch the data from the remote API
-        // need library to do the ajax request
-        // use axios: npm i -S axios
-        // and import it above, then:
-        axios.get('/api/contests') // specify the url for the API endpoint that we're going to read
-        // ^ /api/contests, since on the same server for now
-        .then(resp => { // axios is a promise base, so need to handle with 'then' method and 'cath' any errors
-            // console.log(resp); // the response object 'resp' will have the data
-            // ^ after testing, realized that contests data in: resp.data.contests, so:
-            this.setState({
-                contests: resp.data.contests
-            });
-            // ^ data is now being loaded through an ajax request
-            // and getting set on the React component state
-        }) 
-        .catch(console.error)
+         // wasteful to reset the state here, if we have the data to begin with...
+         // so move it to ../index.js
+         // also, no need to import axios here, since it's not used
+        // axios.get('/api/contests')
+        // .then(resp => {
+        //     this.setState({
+        //         contests: resp.data.contests
+        //     });
+        // }) 
+        // .catch(console.error);
      }
      componentWillUnmount() {
      }

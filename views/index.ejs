@@ -1,28 +1,14 @@
-<!-- ---------------------------------- -->
-<!-- 5. Using the EJS template language -->
-<!-- ---------------------------------- -->
+<!-- deleted previous code and notes due to error... -->
 
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Hello EJS</title>
-</head>
-<body>
-    <%- content %> -->
-    <!-- can use 'content' as a variable as passed in from ../server.js -->
-    <!-- <%= content %> is default denotation, doesn't take in html tags -->
-<!-- </body>
-</html> -->
+<!-- ------------------------------------------------------------------------------------------------- -->
+<!-- 19. Render React components on the server using fetched API data using the ReactDOMServer package -->
+<!-- ------------------------------------------------------------------------------------------------- -->
 
-
-<!-- ----------------------------------------------------------------- -->
-<!-- 6. Using partial views in ejs to reduce redundancy and simplify ^ -->
-<!-- ----------------------------------------------------------------- -->
+<script type="text/javascript">
+    window.initialData = <%- JSON.stringify(initialData) -%>
+    // ^ put the stringified initial data as a global variable on the window
+</script>
 
 <%- include('header') -%>
-    <div id="root"><%- content %></div>
-    <!-- ^ means render React (because id='root'), and if that does not exist, render default content -->
+    <div id="root"><%- initialMarkup -%></div>
 <%- include('footer') -%>

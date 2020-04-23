@@ -221,17 +221,65 @@ server.use(sassMiddleware({
 
 server.set('view engine', 'ejs');
 
-import './serverRender'
+// import './serverRender'
+// server.get('/', (req, res) => {
+//   res.render('index', {
+//     content: '...'
+//   });
+// });
+
+// server.use('/api', apiRouter);
+// server.use(express.static('public'));
+
+// server.listen(config.port, config.host, () => {
+//   // ^ listen to host as well so that it will bind to the same host that we have
+//   console.info('Express listening on port', config.port);
+// });
+
+
+/*************************************************************************************************************/
+/***** 19. Render React components on the server using fetched API data using the ReactDOMServer package *****/
+/*************************************************************************************************************/
+
+server.set('view engine', 'ejs');
+
+// import serverRender from './serverRender'; // import the default export instead of the file itself
+// server.get('/', (req, res) => {
+//   serverRender() // can now call the serverRender as function (which returns a promise, so do '.then')
+//     .then(content => { // this now gives us the content that we want to feed into the EJS template
+//       res.render('index', {
+//         content // render the content in EJS
+//         // can test: curl http://localhost:8080/
+//         // should be able to read the data, coming directly from the ReactDOMServer
+//       });
+//     })
+//     .catch(console.error);
+// });
+
+// server.use('/api', apiRouter);
+// server.use(express.static('public'));
+
+// server.listen(config.port, config.host, () => {
+//   console.info('Express listening on port', config.port);
+// });
+
+import serverRender from './serverRender';
 server.get('/', (req, res) => {
-  res.render('index', {
-    content: '...'
-  });
+  serverRender()
+    .then(( {initialMarkup, initialData} ) => { // need to destructure using '{}'
+      res.render('index', {
+        initialMarkup,
+        initialData
+        // ^ render both the content and the data (from axios call in ./serverRender)
+        // then make necessary changes in views/index.ejs where we're rendering the content
+      });
+    })
+    .catch(console.error);
 });
 
 server.use('/api', apiRouter);
 server.use(express.static('public'));
 
 server.listen(config.port, config.host, () => {
-  // ^ listen to host as well so that it will bind to the same host that we have
   console.info('Express listening on port', config.port);
 });

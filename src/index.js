@@ -138,11 +138,46 @@ import App from './components/App';
 /**********************************************/
 
 // React will render first before data is loaded from API so create an empty array
+// ReactDOM.render(
+//     // <App contests={[]} />, // empty array
+//     // once React is loaded, update it with the loaded data in App.js
+//     // but only thing that can be updated inside a component is the STATE of the component
+//     // so... we'll render it from the state:
+//     <App />, // remove it from here and do it in App.js --> state
+//     document.getElementById('root')
+// );
+
+/*************************************************************************************************************/
+/***** 19. Render React components on the server using fetched API data using the ReactDOMServer package *****/
+/*************************************************************************************************************/
+
+// ReactDOM.render(
+//     <App initialContests={[]}/>, // pass in initialContests as an empty array here
+//     document.getElementById('root')
+// );
+
+// add the axios call here because we need to bring in the data before rendering the front-end component
+// and instead of setting the state, do ReactDOM.render call here
+// import axios from 'axios';
+
+// axios.get('/api/contests')
+// .then(resp => {
+//     ReactDOM.render(
+//         <App initialContests={resp.data.contests}/>, // the initial data here are resp.data.contests
+//         document.getElementById('root')
+//     );
+// }) 
+// .catch(console.error);
+
+// ^ basically, client is going back to the api to fetch the data
+// still kinda wasteful... so to return the data from the server itself in the axios call from ../serverRender.js
+// will also need to modify ../server.js to take in both the markup and the data
+// then make necessary changes in views/index.ejs where we're rendering the content
+// so on the front-end (here), instead of doing an extra hit to the API,
+// can render directly using the global variable created in ejs
+// (i.e. no need to do axios call / also no need to import axios here now):
 ReactDOM.render(
-    // <App contests={[]} />, // empty array
-    // once React is loaded, update it with the loaded data in App.js
-    // but only thing that can be updated inside a component is the STATE of the component
-    // so... we'll render it from the state:
-    <App />, // remove it from here and do it in App.js --> state
+    <App initialContests={window.initialData.contests}/>, // render directly using window.initialData
     document.getElementById('root')
 );
+// NOW, React is re-rendering the view IN SYNC with the server rendered view
