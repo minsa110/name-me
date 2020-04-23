@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/minsa110/name-me#readme",
   "dependencies": {
+    "axios": "^0.19.2",
     "ejs": "^3.0.2",
     "express": "^4.17.1",
     "mongodb": "^3.5.6",

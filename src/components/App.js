@@ -138,18 +138,67 @@ import Header from './Header';
 
 import ContestPreview from './ContestPreview';
 
-import data from '../testData'; // for testing purposes
+// import data from '../testData'; // for testing purposes
+
+// class App extends React.Component {
+//     state = { 
+//         pageHeader: 'Naming Contests!',
+//         contests: [] // 1. render empty array of data (since might not be loaded from API yet)
+//      };
+//      componentDidMount() {
+//          // 3. modify when data is accessible
+//          this.setState({
+//              contests: data.contests
+//          });
+//      }
+//      componentWillUnmount() {
+//      }
+//     render() {
+//         return (
+//             <div className="App">
+//                 <Header message={this.state.pageHeader} />
+//                 <div>
+//                     {this.state.contests.map(contest => // 2. read directly from the state instead of the props
+//                         // when listing things dynamically in React, need to identify every element with a key
+//                         <ContestPreview key={contest.id} {...contest} />
+//                         // DO NOT to use array index as unique key
+//                     )}
+//                 </div>
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+
+/***************************************************/
+/***** 17. Use data from the React application *****/
+/***************************************************/
+
+import axios from 'axios';
 
 class App extends React.Component {
     state = { 
         pageHeader: 'Naming Contests!',
-        contests: [] // 1. render empty array of data (since might not be loaded from API yet)
+        contests: []
      };
      componentDidMount() {
-         // 3. modify when data is accessible
-         this.setState({
-             contests: data.contests
-         });
+        // do an ajax request and fetch the data from the remote API
+        // need library to do the ajax request
+        // use axios: npm i -S axios
+        // and import it above, then:
+        axios.get('/api/contests') // specify the url for the API endpoint that we're going to read
+        // ^ /api/contests, since on the same server for now
+        .then(resp => { // axios is a promise base, so need to handle with 'then' method and 'cath' any errors
+            // console.log(resp); // the response object 'resp' will have the data
+            // ^ after testing, realized that contests data in: resp.data.contests, so:
+            this.setState({
+                contests: resp.data.contests
+            });
+            // ^ data is now being loaded through an ajax request
+            // and getting set on the React component state
+        }) 
+        .catch(console.error)
      }
      componentWillUnmount() {
      }
@@ -158,10 +207,8 @@ class App extends React.Component {
             <div className="App">
                 <Header message={this.state.pageHeader} />
                 <div>
-                    {this.state.contests.map(contest => // 2. read directly from the state instead of the props
-                        // when listing things dynamically in React, need to identify every element with a key
+                    {this.state.contests.map(contest =>
                         <ContestPreview key={contest.id} {...contest} />
-                        // DO NOT to use array index as unique key
                     )}
                 </div>
             </div>
