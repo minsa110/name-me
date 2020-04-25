@@ -136,7 +136,7 @@ import Header from './Header';
 // - we can have a plan in working with any delay in fetching the data from API
 // - allows us to have control the list
 
-import ContestPreview from './ContestPreview';
+// import ContestPreview from './ContestPreview';
 
 // import data from '../testData'; // for testing purposes
 
@@ -223,22 +223,54 @@ import ContestPreview from './ContestPreview';
 /***** 19. Render React components on the server using fetched API data using the ReactDOMServer package *****/
 /*************************************************************************************************************/
 
+// class App extends React.Component {
+//     state = { 
+//         pageHeader: 'Naming Contests!',
+//         contests: this.props.initialContests // this is actually same as before, since initialized as empty array in ../index.js
+//      };
+//      componentDidMount() {
+//          // wasteful to reset the state here, if we have the data to begin with...
+//          // so move it to ../index.js
+//          // also, no need to import axios here, since it's not used
+//         // axios.get('/api/contests')
+//         // .then(resp => {
+//         //     this.setState({
+//         //         contests: resp.data.contests
+//         //     });
+//         // }) 
+//         // .catch(console.error);
+//      }
+//      componentWillUnmount() {
+//      }
+//     render() {
+//         return (
+//             <div className="App">
+//                 <Header message={this.state.pageHeader} />
+//                 <div>
+//                     {this.state.contests.map(contest =>
+//                         <ContestPreview key={contest.id} {...contest} />
+//                     )}
+//                 </div>
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+
+
+/*************************************/
+/***** 20. Handling click events *****/
+/*************************************/
+
+import ContestList from './ContestList';
+
 class App extends React.Component {
     state = { 
         pageHeader: 'Naming Contests!',
-        contests: this.props.initialContests // this is actually same as before, since initialized as empty array in ../index.js
+        contests: this.props.initialContests
      };
      componentDidMount() {
-         // wasteful to reset the state here, if we have the data to begin with...
-         // so move it to ../index.js
-         // also, no need to import axios here, since it's not used
-        // axios.get('/api/contests')
-        // .then(resp => {
-        //     this.setState({
-        //         contests: resp.data.contests
-        //     });
-        // }) 
-        // .catch(console.error);
      }
      componentWillUnmount() {
      }
@@ -246,11 +278,20 @@ class App extends React.Component {
         return (
             <div className="App">
                 <Header message={this.state.pageHeader} />
-                <div>
+                {/* FIRST, refactor this code into its own component into ./ContestList.js */}
+                {/* then import the component here ^ */}
+
+                {/* <div>
                     {this.state.contests.map(contest =>
-                        <ContestPreview key={contest.id} {...contest} />
+                        <ContestPreview key={contest.id} {...contest} /> // no need to import ContestPreview here anymore, import in ./ContestList instead
                     )}
-                </div>
+                </div> */}
+
+                {/* then just use it here! */}
+                <ContestList contests={this.state.contests} />
+                {/* 'this.state' because we can read contest from the state... */}
+
+                {/* SECONDLY, define onClick handler in ./ContestPreview */}
             </div>
         );
     }
