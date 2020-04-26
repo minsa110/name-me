@@ -312,6 +312,48 @@ const pushState = (obj, url) =>
     window.history.pushState (obj, '', url)
     // ^ note: second parameter = title
 
+// class App extends React.Component {
+//     state = { 
+//         pageHeader: 'Naming Contests!',
+//         contests: this.props.initialContests
+//      };
+//      componentDidMount() {
+//      }
+//      componentWillUnmount() {
+//      }
+//     // a function that fetches contest information from the server when we click on it to /contest/ID of the contest
+//     fetchContest = (contestId) => { // for now only receives the contestId
+//         pushState( // use pushState to push a history record
+//             { currentContestId: contestId }, // object of the record
+//             `/contest/${contestId}` // url
+//             )
+//         }
+//     // ^ pass this function down to the children component below
+//     // then pass it as a property to ./ContestList && ./ContestPreview
+//     // can test on browser by clicking on each element and seeing the url changes
+//     // also try going back and forth on history
+
+//     render() {
+//         return (
+//             <div className="App">
+//                 <Header message={this.state.pageHeader} />
+//                 <ContestList
+//                     onContestClick={this.fetchContest} // passed in function from above
+//                     contests={this.state.contests} />
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+
+
+/**************************************************/
+/***** 22. Looking up contest on route change *****/
+/**************************************************/
+
+import Contest from './Contest';
+
 class App extends React.Component {
     state = { 
         pageHeader: 'Naming Contests!',
@@ -321,25 +363,47 @@ class App extends React.Component {
      }
      componentWillUnmount() {
      }
-    // a function that fetches contest information from the server when we click on it to /contest/ID of the contest
-    fetchContest = (contestId) => { // for now only receives the contestId
-        pushState( // use pushState to push a history record
-            { currentContestId: contestId }, // object of the record
-            `/contest/${contestId}` // url
-            )
+    fetchContest = (contestId) => {
+        pushState(
+            { currentContestId: contestId },
+            `/contest/${contestId}`
+        );
+        // lookup the contest
+        // actual contest we're navigating to will be this.state.contests[contestId]
+        // so we have to change the state:
+        this.setState({
+            // change the page header:
+            pageHeader: this.state.contests[contestId].contestName,
+            // to change the content, need a conditional statement to see what the current contest is
+            // so place current contest ID in the state as well when clicked:
+            currentContestId: contestId
+            // then place the conditional statement ('currentContent') in render return below
+        });
+    };
+
+    // instance function containing conditional statement to set the content of the page to render
+    currentContent() {
+        if(this.state.currentContestId) { // if currentContestId exists...
+            // return contest, but need a contest object to display
+            // so spread a contest object on a new contest component (./Contest.js):
+            return <Contest {...this.state.contests[this.state.currentContestId]} />;
+            // ^ spread it using '...'
         }
-    // ^ pass this function down to the children component below
-    // then pass it as a property to ./ContestList && ./ContestPreview
-    // can test on browser by clicking on each element and seeing the url changes
-    // also try going back and forth on history
+        // else return the contest list
+        return <ContestList
+                onContestClick={this.fetchContest}
+                contests={this.state.contests} />;
+    }
 
     render() {
         return (
             <div className="App">
                 <Header message={this.state.pageHeader} />
-                <ContestList
-                    onContestClick={this.fetchContest} // passed in function from above
-                    contests={this.state.contests} />
+                {/* <ContestList
+                    onContestClick={this.fetchContest}
+                    contests={this.state.contests} /> */}
+                {/* place this ^ in a function containing conditional statement: */}
+                {this.currentContent()}
             </div>
         );
     }
