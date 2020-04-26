@@ -176,8 +176,17 @@ import App from './components/App';
 // so on the front-end (here), instead of doing an extra hit to the API,
 // can render directly using the global variable created in ejs
 // (i.e. no need to do axios call / also no need to import axios here now):
-ReactDOM.render(
+// ReactDOM.render(
+//     <App initialContests={window.initialData.contests}/>, // render directly using window.initialData
+//     document.getElementById('root')
+// );
+// NOW, React is re-rendering the view IN SYNC with the server rendered view
+
+
+// FYI -
+// render(): Calling ReactDOM.render() to hydrate server-rendered markup will stop working in React v17.
+// Replace the ReactDOM.render() call with ReactDOM.hydrate() if you want React to attach to the server HTML.
+ReactDOM.hydrate(
     <App initialContests={window.initialData.contests}/>, // render directly using window.initialData
     document.getElementById('root')
 );
-// NOW, React is re-rendering the view IN SYNC with the server rendered view

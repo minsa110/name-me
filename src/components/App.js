@@ -306,10 +306,10 @@ import ContestList from './ContestList';
 
 // use native browser’s history to navigate to the contest using HTML history API
 // but put history API in a function here:
-const pushState = (obj, url) =>
-    // ^ this function receives the same parameters that the official pushState receives (from API), 'obj' && 'url'
-    // and this pushState will be an alias to:
-    window.history.pushState (obj, '', url)
+// const pushState = (obj, url) =>
+//     // ^ this function receives the same parameters that the official pushState receives (from API), 'obj' && 'url'
+//     // and this pushState will be an alias to:
+//     window.history.pushState (obj, '', url)
     // ^ note: second parameter = title
 
 // class App extends React.Component {
@@ -354,6 +354,74 @@ const pushState = (obj, url) =>
 
 import Contest from './Contest';
 
+// class App extends React.Component {
+//     state = { 
+//         pageHeader: 'Naming Contests!',
+//         contests: this.props.initialContests
+//      };
+//      componentDidMount() {
+//      }
+//      componentWillUnmount() {
+//      }
+//     fetchContest = (contestId) => {
+//         pushState(
+//             { currentContestId: contestId },
+//             `/contest/${contestId}`
+//         );
+//         // lookup the contest
+//         // actual contest we're navigating to will be this.state.contests[contestId]
+//         // so we have to change the state:
+//         this.setState({
+//             // change the page header:
+//             pageHeader: this.state.contests[contestId].contestName,
+//             // to change the content, need a conditional statement to see what the current contest is
+//             // so place current contest ID in the state as well when clicked:
+//             currentContestId: contestId
+//             // then place the conditional statement ('currentContent') in render return below
+//         });
+//     };
+
+//     // instance function containing conditional statement to set the content of the page to render
+//     currentContent() {
+//         if(this.state.currentContestId) { // if currentContestId exists...
+//             // return contest, but need a contest object to display
+//             // so spread a contest object on a new contest component (./Contest.js):
+//             return <Contest {...this.state.contests[this.state.currentContestId]} />;
+//             // ^ spread it using '...'
+//         }
+//         // else return the contest list
+//         return <ContestList
+//                 onContestClick={this.fetchContest}
+//                 contests={this.state.contests} />;
+//     }
+
+//     render() {
+//         return (
+//             <div className="App">
+//                 <Header message={this.state.pageHeader} />
+//                 {/* <ContestList
+//                     onContestClick={this.fetchContest}
+//                     contests={this.state.contests} /> */}
+//                 {/* place this ^ in a function containing conditional statement: */}
+//                 {this.currentContent()}
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+
+
+/**************************************************/
+/***** 23. Fetching contest info from the API *****/
+/**************************************************/
+
+import * as api from '../api';
+
+// introduce new route in ../../api/index.js
+const pushState = (obj, url) =>
+    history.pushState (obj, '', url)
+
 class App extends React.Component {
     state = { 
         pageHeader: 'Naming Contests!',
@@ -368,28 +436,29 @@ class App extends React.Component {
             { currentContestId: contestId },
             `/contest/${contestId}`
         );
-        // lookup the contest
-        // actual contest we're navigating to will be this.state.contests[contestId]
-        // so we have to change the state:
-        this.setState({
-            // change the page header:
-            pageHeader: this.state.contests[contestId].contestName,
-            // to change the content, need a conditional statement to see what the current contest is
-            // so place current contest ID in the state as well when clicked:
-            currentContestId: contestId
-            // then place the conditional statement ('currentContent') in render return below
+        // fetch contest from api here first before setting the state:
+        api.fetchContest(contestId).then(contest => { // this is the actual contest coming from the server
+            this.setState({ // make sure that we're reading the name and ID from the fetched contest:
+                pageHeader: contest.contestName,
+                currentContestId: contest.id,
+                // modify the contest object we have on the state by copying the current contest object
+                contests: {
+                    ...this.state.contests, // current contest object
+                    // now set the property associate with current contest ID to be the new contest object
+                    [contest.id]: contest // inside '[]' because it's dynamic
+                    // ^ this way, we cache the fetched contest info on the state
+                    // so will be improvement on performance when going back and forth
+
+                    // test in browser by inspecting "Network"
+                }
+            });
         });
     };
 
-    // instance function containing conditional statement to set the content of the page to render
     currentContent() {
-        if(this.state.currentContestId) { // if currentContestId exists...
-            // return contest, but need a contest object to display
-            // so spread a contest object on a new contest component (./Contest.js):
+        if(this.state.currentContestId) {
             return <Contest {...this.state.contests[this.state.currentContestId]} />;
-            // ^ spread it using '...'
         }
-        // else return the contest list
         return <ContestList
                 onContestClick={this.fetchContest}
                 contests={this.state.contests} />;
@@ -399,11 +468,7 @@ class App extends React.Component {
         return (
             <div className="App">
                 <Header message={this.state.pageHeader} />
-                {/* <ContestList
-                    onContestClick={this.fetchContest}
-                    contests={this.state.contests} /> */}
-                {/* place this ^ in a function containing conditional statement: */}
-                {this.currentContent()}
+                    {this.currentContent()}
             </div>
         );
     }

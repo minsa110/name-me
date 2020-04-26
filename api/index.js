@@ -60,4 +60,19 @@ router.get('/contests', (req, res) => {
     });
 });
 
+// export default router;
+
+
+/**************************************************/
+/***** 23. Fetching contest info from the API *****/
+/**************************************************/
+
+router.get('/contests/:contestId', (req, res) => { // ':/contestId' = dynamic contest ID in express
+    let contest = contests[req.params.contestId];
+    contest.description = 'me fake';
+    // test in browser: http://localhost:8080/api/contests/3
+    res.send(contest);
+    // then, fetch this info with Ajax in ../src/api.js
+});
+
 export default router;
