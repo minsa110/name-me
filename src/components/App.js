@@ -1,5 +1,5 @@
-import React from 'react';
-import Header from './Header';
+// import React from 'react';
+// import Header from './Header';
 // ^ can be read as "this module depends on react and the Header component"
 
 // const App = () => { // stateless function component
@@ -263,7 +263,7 @@ import Header from './Header';
 /***** 20. Handling click events *****/
 /*************************************/
 
-import ContestList from './ContestList';
+// import ContestList from './ContestList';
 
 // class App extends React.Component {
 //     state = { 
@@ -352,7 +352,7 @@ import ContestList from './ContestList';
 /***** 22. Looking up contest on route change *****/
 /**************************************************/
 
-import Contest from './Contest';
+// import Contest from './Contest';
 
 // class App extends React.Component {
 //     state = { 
@@ -416,17 +416,444 @@ import Contest from './Contest';
 /***** 23. Fetching contest info from the API *****/
 /**************************************************/
 
-import * as api from '../api';
+// import * as api from '../api';
 
 // introduce new route in ../../api/index.js
+// const pushState = (obj, url) =>
+//     history.pushState (obj, '', url)
+
+// class App extends React.Component {
+//     state = { 
+//         pageHeader: 'Naming Contests!',
+//         contests: this.props.initialContests
+//      };
+//      componentDidMount() {
+//      }
+//      componentWillUnmount() {
+//      }
+//     fetchContest = (contestId) => {
+//         pushState(
+//             { currentContestId: contestId },
+//             `/contest/${contestId}`
+//         );
+//         // fetch contest from api here first before setting the state:
+//         api.fetchContest(contestId).then(contest => { // this is the actual contest coming from the server
+//             this.setState({ // make sure that we're reading the name and ID from the fetched contest:
+//                 pageHeader: contest.contestName,
+//                 currentContestId: contest.id,
+//                 // modify the contest object we have on the state by copying the current contest object
+//                 contests: {
+//                     ...this.state.contests, // current contest object
+//                     // now set the property associate with current contest ID to be the new contest object
+//                     [contest.id]: contest // inside '[]' because it's dynamic
+//                     // ^ this way, we cache the fetched contest info on the state
+//                     // so will be improvement on performance when going back and forth
+
+//                     // test in browser by inspecting "Network"
+//                 }
+//             });
+//         });
+//     };
+
+//     currentContent() {
+//         if(this.state.currentContestId) {
+//             return <Contest {...this.state.contests[this.state.currentContestId]} />;
+//         }
+//         return <ContestList
+//                 onContestClick={this.fetchContest}
+//                 contests={this.state.contests} />;
+//     }
+
+//     render() {
+//         return (
+//             <div className="App">
+//                 <Header message={this.state.pageHeader} />
+//                     {this.currentContent()}
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+//         return (
+//             <div className="App">
+//                 <Header message={this.state.pageHeader} />
+//                 {/* <ContestList
+//                     onContestClick={this.fetchContest}
+//                     contests={this.state.contests} /> */}
+//                 {/* place this ^ in a function containing conditional statement: */}
+//                 {this.currentContent()}
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+
+
+/**************************************************/
+/***** 23. Fetching contest info from the API *****/
+/**************************************************/
+
+// import * as api from '../api';
+
+// introduce new route in ../../api/index.js
+// const pushState = (obj, url) =>
+//     history.pushState (obj, '', url)
+
+// class App extends React.Component {
+//     state = { 
+//         pageHeader: 'Naming Contests!',
+//         contests: this.props.initialContests
+//      };
+//      componentDidMount() {
+//      }
+//      componentWillUnmount() {
+//      }
+//     fetchContest = (contestId) => {
+//         pushState(
+//             { currentContestId: contestId },
+//             `/contest/${contestId}`
+//         );
+//         // fetch contest from api here first before setting the state:
+//         api.fetchContest(contestId).then(contest => { // this is the actual contest coming from the server
+//             this.setState({ // make sure that we're reading the name and ID from the fetched contest:
+//                 pageHeader: contest.contestName,
+//                 currentContestId: contest.id,
+//                 // modify the contest object we have on the state by copying the current contest object
+//                 contests: {
+//                     ...this.state.contests, // current contest object
+//                     // now set the property associate with current contest ID to be the new contest object
+//                     [contest.id]: contest // inside '[]' because it's dynamic
+//                     // ^ this way, we cache the fetched contest info on the state
+//                     // so will be improvement on performance when going back and forth
+
+//                     // test in browser by inspecting "Network"
+//                 }
+//             });
+//         });
+//     };
+
+//     currentContent() {
+//         if(this.state.currentContestId) {
+//             return <Contest {...this.state.contests[this.state.currentContestId]} />;
+//         }
+//         return <ContestList
+//                 onContestClick={this.fetchContest}
+//                 contests={this.state.contests} />;
+//     }
+
+//     render() {
+//         return (
+//             <div className="App">
+//                 <Header message={this.state.pageHeader} />
+//                     {this.currentContent()}
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+//     render() {
+//         return (
+//             <div className="App">
+//                 <Header message={this.state.pageHeader} />
+//                     {this.currentContent()}
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+//         return (
+//             <div className="App">
+//                 <Header message={this.state.pageHeader} />
+//                 {/* <ContestList
+//                     onContestClick={this.fetchContest}
+//                     contests={this.state.contests} /> */}
+//                 {/* place this ^ in a function containing conditional statement: */}
+//                 {this.currentContent()}
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+
+
+/**************************************************/
+/***** 23. Fetching contest info from the API *****/
+/**************************************************/
+
+// import * as api from '../api';
+
+// introduce new route in ../../api/index.js
+// const pushState = (obj, url) =>
+//     history.pushState (obj, '', url)
+
+// class App extends React.Component {
+//     state = { 
+//         pageHeader: 'Naming Contests!',
+//         contests: this.props.initialContests
+//      };
+//      componentDidMount() {
+//      }
+//      componentWillUnmount() {
+//      }
+//     fetchContest = (contestId) => {
+//         pushState(
+//             { currentContestId: contestId },
+//             `/contest/${contestId}`
+//         );
+//         // fetch contest from api here first before setting the state:
+//         api.fetchContest(contestId).then(contest => { // this is the actual contest coming from the server
+//             this.setState({ // make sure that we're reading the name and ID from the fetched contest:
+//                 pageHeader: contest.contestName,
+//                 currentContestId: contest.id,
+//                 // modify the contest object we have on the state by copying the current contest object
+//                 contests: {
+//                     ...this.state.contests, // current contest object
+//                     // now set the property associate with current contest ID to be the new contest object
+//                     [contest.id]: contest // inside '[]' because it's dynamic
+//                     // ^ this way, we cache the fetched contest info on the state
+//                     // so will be improvement on performance when going back and forth
+
+//                     // test in browser by inspecting "Network"
+//                 }
+//             });
+//         });
+//     };
+
+//     currentContent() {
+//         if(this.state.currentContestId) {
+//             return <Contest {...this.state.contests[this.state.currentContestId]} />;
+//         }
+//         return <ContestList
+//                 onContestClick={this.fetchContest}
+//                 contests={this.state.contests} />;
+//     }
+
+//     render() {
+//         return (
+//             <div className="App">
+//                 <Header message={this.state.pageHeader} />
+//                     {this.currentContent()}
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+//     render() {
+//         return (
+//             <div className="App">
+//                 <Header message={this.state.pageHeader} />
+//                     {this.currentContent()}
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+//         return (
+//             <div className="App">
+//                 <Header message={this.state.pageHeader} />
+//                 {/* <ContestList
+//                     onContestClick={this.fetchContest}
+//                     contests={this.state.contests} /> */}
+//                 {/* place this ^ in a function containing conditional statement: */}
+//                 {this.currentContent()}
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+
+
+/**************************************************/
+/***** 23. Fetching contest info from the API *****/
+/**************************************************/
+
+// import * as api from '../api';
+
+// introduce new route in ../../api/index.js
+// const pushState = (obj, url) =>
+//     history.pushState (obj, '', url)
+
+// class App extends React.Component {
+//     state = { 
+//         pageHeader: 'Naming Contests!',
+//         contests: this.props.initialContests
+//      };
+//      componentDidMount() {
+//      }
+//      componentWillUnmount() {
+//      }
+//     fetchContest = (contestId) => {
+//         pushState(
+//             { currentContestId: contestId },
+//             `/contest/${contestId}`
+//         );
+//         // fetch contest from api here first before setting the state:
+//         api.fetchContest(contestId).then(contest => { // this is the actual contest coming from the server
+//             this.setState({ // make sure that we're reading the name and ID from the fetched contest:
+//                 pageHeader: contest.contestName,
+//                 currentContestId: contest.id,
+//                 // modify the contest object we have on the state by copying the current contest object
+//                 contests: {
+//                     ...this.state.contests, // current contest object
+//                     // now set the property associate with current contest ID to be the new contest object
+//                     [contest.id]: contest // inside '[]' because it's dynamic
+//                     // ^ this way, we cache the fetched contest info on the state
+//                     // so will be improvement on performance when going back and forth
+
+//                     // test in browser by inspecting "Network"
+//                 }
+//             });
+//         });
+//     };
+
+//     currentContent() {
+//         if(this.state.currentContestId) {
+//             return <Contest {...this.state.contests[this.state.currentContestId]} />;
+//         }
+//         return <ContestList
+//                 onContestClick={this.fetchContest}
+//                 contests={this.state.contests} />;
+//     }
+
+//     render() {
+//         return (
+//             <div className="App">
+//                 <Header message={this.state.pageHeader} />
+//                     {this.currentContent()}
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+//     render() {
+//         return (
+//             <div className="App">
+//                 <Header message={this.state.pageHeader} />
+//                     {this.currentContent()}
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+//         return (
+//             <div className="App">
+//                 <Header message={this.state.pageHeader} />
+//                 {/* <ContestList
+//                     onContestClick={this.fetchContest}
+//                     contests={this.state.contests} /> */}
+//                 {/* place this ^ in a function containing conditional statement: */}
+//                 {this.currentContent()}
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+
+
+/**************************************************/
+/***** 23. Fetching contest info from the API *****/
+/**************************************************/
+
+// import * as api from '../api';
+
+// introduce new route in ../../api/index.js
+// const pushState = (obj, url) =>
+//     history.pushState (obj, '', url)
+
+// class App extends React.Component {
+//     state = { 
+//         pageHeader: 'Naming Contests!',
+//         contests: this.props.initialContests
+//      };
+//      componentDidMount() {
+//      }
+//      componentWillUnmount() {
+//      }
+//     fetchContest = (contestId) => {
+//         pushState(
+//             { currentContestId: contestId },
+//             `/contest/${contestId}`
+//         );
+//         // fetch contest from api here first before setting the state:
+//         api.fetchContest(contestId).then(contest => { // this is the actual contest coming from the server
+//             this.setState({ // make sure that we're reading the name and ID from the fetched contest:
+//                 pageHeader: contest.contestName,
+//                 currentContestId: contest.id,
+//                 // modify the contest object we have on the state by copying the current contest object
+//                 contests: {
+//                     ...this.state.contests, // current contest object
+//                     // now set the property associate with current contest ID to be the new contest object
+//                     [contest.id]: contest // inside '[]' because it's dynamic
+//                     // ^ this way, we cache the fetched contest info on the state
+//                     // so will be improvement on performance when going back and forth
+
+//                     // test in browser by inspecting "Network"
+//                 }
+//             });
+//         });
+//     };
+
+//     currentContent() {
+//         if(this.state.currentContestId) {
+//             return <Contest {...this.state.contests[this.state.currentContestId]} />;
+//         }
+//         return <ContestList
+//                 onContestClick={this.fetchContest}
+//                 contests={this.state.contests} />;
+//     }
+
+//     render() {
+//         return (
+//             <div className="App">
+//                 <Header message={this.state.pageHeader} />
+//                     {this.currentContent()}
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+
+
+/********************************/
+/***** 24. Code refactoring *****/
+/********************************/
+
+import React from 'react';
+import Header from './Header';
+import ContestList from './ContestList';
+import Contest from './Contest';
+import * as api from '../api';
+import PropTypes from 'prop-types';
+
 const pushState = (obj, url) =>
     history.pushState (obj, '', url)
 
 class App extends React.Component {
-    state = { 
-        pageHeader: 'Naming Contests!',
-        contests: this.props.initialContests
-     };
+    static propTypes = { // using this since we have a class, so propTypes can just be a static property
+        initialData: PropTypes.object.isRequired
+    };
+    // state = { 
+    //     // pageHeader: 'Naming Contests!', // <-- can be computed, don't need it on the state
+    //     // so remove from state and create function
+
+    //     contests: this.props.initialContests
+    //     // ^ we're actually getting the initial data itself from ./Contest.js
+    //     // which is actually top level, so the whole state 'state ={...}'
+    //     // will be initiated as: this.props.initialData
+    //  };
+    state = this.props.initialData; // also need to define the type for this data above
      componentDidMount() {
      }
      componentWillUnmount() {
@@ -436,28 +863,35 @@ class App extends React.Component {
             { currentContestId: contestId },
             `/contest/${contestId}`
         );
-        // fetch contest from api here first before setting the state:
-        api.fetchContest(contestId).then(contest => { // this is the actual contest coming from the server
-            this.setState({ // make sure that we're reading the name and ID from the fetched contest:
-                pageHeader: contest.contestName,
+        api.fetchContest(contestId).then(contest => {
+            this.setState({
+                // pageHeader: contest.contestName,
+                // no need to set ^ as state here, since computed as a method
                 currentContestId: contest.id,
-                // modify the contest object we have on the state by copying the current contest object
                 contests: {
-                    ...this.state.contests, // current contest object
-                    // now set the property associate with current contest ID to be the new contest object
-                    [contest.id]: contest // inside '[]' because it's dynamic
-                    // ^ this way, we cache the fetched contest info on the state
-                    // so will be improvement on performance when going back and forth
-
-                    // test in browser by inspecting "Network"
+                    ...this.state.contests,
+                    [contest.id]: contest
                 }
             });
         });
     };
 
+    currentContest() {
+        return this.state.contests[this.state.currentContestId];
+    }
+
+    pageHeader() {
+        if (this.state.currentContestId) {
+            return this.currentContest().contestName;
+        }
+        return 'Naming Contests!';
+    }
+    // then change it everywhere we have 'pageHeader'
+
     currentContent() {
         if(this.state.currentContestId) {
-            return <Contest {...this.state.contests[this.state.currentContestId]} />;
+            // extract this long line into its own method, 'currentContest'
+            return <Contest {...this.currentContest()} />;
         }
         return <ContestList
                 onContestClick={this.fetchContest}
@@ -467,7 +901,9 @@ class App extends React.Component {
     render() {
         return (
             <div className="App">
-                <Header message={this.state.pageHeader} />
+                {/* <Header message={this.state.pageHeader} /> */}
+                {/* now read this ^ from the method instead of the state */}
+                <Header message={this.pageHeader()} />
                     {this.currentContent()}
             </div>
         );

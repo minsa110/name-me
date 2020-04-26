@@ -186,7 +186,21 @@ import App from './components/App';
 // FYI -
 // render(): Calling ReactDOM.render() to hydrate server-rendered markup will stop working in React v17.
 // Replace the ReactDOM.render() call with ReactDOM.hydrate() if you want React to attach to the server HTML.
+// ReactDOM.hydrate(
+//     <App initialContests={window.initialData.contests}/>, // render directly using window.initialData
+//     document.getElementById('root')
+// );
+
+
+/********************************/
+/***** 24. Code refactoring *****/
+/********************************/
+
 ReactDOM.hydrate(
-    <App initialContests={window.initialData.contests}/>, // render directly using window.initialData
+    // <App initialContests={window.initialData.contests}/>,
+    // ^ currently, the App assumes that we get initial contests...
+    // but need to give it the initial data itself:
+    <App initialData={window.initialData}/>,
+    // which also means that it needs to be changed in App.js too
     document.getElementById('root')
 );

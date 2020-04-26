@@ -57,15 +57,43 @@ import App from './src/components/App';
 // export default serverRender;
 // // then in ./server.js, import this instead of importing the file directly
 
+// const serverRender =() =>
+//     axios.get(`${config.serverUrl}/api/contests`)
+//     .then(resp => {
+//         return {
+//             initialMarkup: ReactDOMServer.renderToString(
+//                 <App initialContests={resp.data.contests} />
+//             ),
+//             initialData: resp.data
+//             // will also need to modify ./server.js to match so that it includes both of these in the EJS
+//         };
+//     });
+    
+// export default serverRender;
+
+
+/********************************/
+/***** 24. Code refactoring *****/
+/********************************/
+
 const serverRender =() =>
     axios.get(`${config.serverUrl}/api/contests`)
     .then(resp => {
         return {
             initialMarkup: ReactDOMServer.renderToString(
-                <App initialContests={resp.data.contests} />
+                // <App initialContests={resp.data.contests} />
+                // ^ actually not a valid way of passing in the data
+                // because initial structure of the data for when refreshing the main page
+                // is diff. from refreshing the contest page
+                // SO, instead of passing in the initial contests,
+                // need to pass the INITIAL DATA itself!:
+                <App initialData={resp.data} />
+                // ^ this way, we can control the initial structure that we pass to the App component
+                // and it can account for EITHER list of contests or a current contest
+
+                // to make THAT happen, need to change our app in ./src/index.js
             ),
             initialData: resp.data
-            // will also need to modify ./server.js to match so that it includes both of these in the EJS
         };
     });
     
