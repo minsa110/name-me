@@ -265,6 +265,53 @@ import Header from './Header';
 
 import ContestList from './ContestList';
 
+// class App extends React.Component {
+//     state = { 
+//         pageHeader: 'Naming Contests!',
+//         contests: this.props.initialContests
+//      };
+//      componentDidMount() {
+//      }
+//      componentWillUnmount() {
+//      }
+//     render() {
+//         return (
+//             <div className="App">
+//                 <Header message={this.state.pageHeader} />
+//                 {/* FIRST, refactor this code into its own component into ./ContestList.js */}
+//                 {/* then import the component here ^ */}
+
+//                 {/* <div>
+//                     {this.state.contests.map(contest =>
+//                         <ContestPreview key={contest.id} {...contest} /> // no need to import ContestPreview here anymore, import in ./ContestList instead
+//                     )}
+//                 </div> */}
+
+//                 {/* then just use it here! */}
+//                 <ContestList contests={this.state.contests} />
+//                 {/* 'this.state' because we can read contest from the state... */}
+
+//                 {/* SECONDLY, define onClick handler in ./ContestPreview */}
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+
+
+/**************************************/
+/***** 21. Navigating and routing *****/
+/**************************************/
+
+// use native browser’s history to navigate to the contest using HTML history API
+// but put history API in a function here:
+const pushState = (obj, url) =>
+    // ^ this function receives the same parameters that the official pushState receives (from API), 'obj' && 'url'
+    // and this pushState will be an alias to:
+    window.history.pushState (obj, '', url)
+    // ^ note: second parameter = title
+
 class App extends React.Component {
     state = { 
         pageHeader: 'Naming Contests!',
@@ -274,24 +321,25 @@ class App extends React.Component {
      }
      componentWillUnmount() {
      }
+    // a function that fetches contest information from the server when we click on it to /contest/ID of the contest
+    fetchContest = (contestId) => { // for now only receives the contestId
+        pushState( // use pushState to push a history record
+            { currentContestId: contestId }, // object of the record
+            `/contest/${contestId}` // url
+            )
+        }
+    // ^ pass this function down to the children component below
+    // then pass it as a property to ./ContestList && ./ContestPreview
+    // can test on browser by clicking on each element and seeing the url changes
+    // also try going back and forth on history
+
     render() {
         return (
             <div className="App">
                 <Header message={this.state.pageHeader} />
-                {/* FIRST, refactor this code into its own component into ./ContestList.js */}
-                {/* then import the component here ^ */}
-
-                {/* <div>
-                    {this.state.contests.map(contest =>
-                        <ContestPreview key={contest.id} {...contest} /> // no need to import ContestPreview here anymore, import in ./ContestList instead
-                    )}
-                </div> */}
-
-                {/* then just use it here! */}
-                <ContestList contests={this.state.contests} />
-                {/* 'this.state' because we can read contest from the state... */}
-
-                {/* SECONDLY, define onClick handler in ./ContestPreview */}
+                <ContestList
+                    onContestClick={this.fetchContest} // passed in function from above
+                    contests={this.state.contests} />
             </div>
         );
     }

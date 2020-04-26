@@ -45,19 +45,52 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-class ContestPreview extends Component { // 'Component' is undefined so destructure it when importing (see above)
-    // instance function to handle events for each object
-    handleClick = () => { // <-- read 'handleClick is a function '()' using the property syntax so that we can access it inside
-        console.log(this.props.contestName);
+// class ContestPreview extends Component { // 'Component' is undefined so destructure it when importing (see above)
+//     // instance function to handle events for each object
+//     handleClick = () => { // <-- read 'handleClick is a function '()' using the property syntax so that we can access it inside
+//         console.log(this.props.contestName);
+//     };
+//     render() {
+//         return (
+//             <div className="link ContestPreview" onClick={this.handleClick}>
+//                 {/* ^ now that there's an instance, we can use an instance function 'handleClick' on click */}
+//                 {/* ^ also give it 'link' class so that the cursor notifies user that the component is clickable (also change in stylesheet -- style.scss) */}
+//                 <div className="category-name">
+//                     {this.props.categoryName}
+//                     {/* use 'this.props' */}
+//                 </div>
+//                 <div className="contest-name">
+//                     {this.props.contestName}
+//                 </div>
+//             </div>
+//         );
+//     }
+// }
+
+// // define props
+// ContestPreview.propTypes = {
+//     categoryName: PropTypes.string.isRequired,
+//     contestName: PropTypes.string.isRequired
+// };
+
+// export default ContestPreview;
+
+
+/**************************************/
+/***** 21. Navigating and routing *****/
+/**************************************/
+
+class ContestPreview extends Component {
+    handleClick = () => {
+        // call the onClick property here in the function:
+        this.props.onClick(this.props.id); // and send as an argument, 'this.props.id'
+        // ^ define id below too
     };
     render() {
         return (
             <div className="link ContestPreview" onClick={this.handleClick}>
-                {/* ^ now that there's an instance, we can use an instance function 'handleClick' on click */}
-                {/* ^ also give it 'link' class so that the cursor notifies user that the component is clickable (also change in stylesheet - style.scss) */}
                 <div className="category-name">
                     {this.props.categoryName}
-                    {/* use 'this.props' */}
                 </div>
                 <div className="contest-name">
                     {this.props.contestName}
@@ -67,10 +100,12 @@ class ContestPreview extends Component { // 'Component' is undefined so destruct
     }
 }
 
-// define props
 ContestPreview.propTypes = {
     categoryName: PropTypes.string.isRequired,
-    contestName: PropTypes.string.isRequired
+    contestName: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired,
+    // ^ receive this new property from ./ContestList
+    id: PropTypes.number.isRequired
 };
 
 export default ContestPreview;
