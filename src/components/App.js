@@ -840,20 +840,88 @@ import PropTypes from 'prop-types';
 const pushState = (obj, url) =>
     history.pushState (obj, '', url)
 
+// class App extends React.Component {
+//     static propTypes = { // using this since we have a class, so propTypes can just be a static property
+//         initialData: PropTypes.object.isRequired
+//     };
+//     // state = { 
+//     //     // pageHeader: 'Naming Contests!', // <-- can be computed, don't need it on the state
+//     //     // so remove from state and create function
+
+//     //     contests: this.props.initialContests
+//     //     // ^ we're actually getting the initial data itself from ./Contest.js
+//     //     // which is actually top level, so the whole state 'state ={...}'
+//     //     // will be initiated as: this.props.initialData
+//     //  };
+//     state = this.props.initialData; // also need to define the type for this data above
+//      componentDidMount() {
+//      }
+//      componentWillUnmount() {
+//      }
+//     fetchContest = (contestId) => {
+//         pushState(
+//             { currentContestId: contestId },
+//             `/contest/${contestId}`
+//         );
+//         api.fetchContest(contestId).then(contest => {
+//             this.setState({
+//                 // pageHeader: contest.contestName,
+//                 // no need to set ^ as state here, since computed as a method
+//                 currentContestId: contest.id,
+//                 contests: {
+//                     ...this.state.contests,
+//                     [contest.id]: contest
+//                 }
+//             });
+//         });
+//     };
+
+//     currentContest() {
+//         return this.state.contests[this.state.currentContestId];
+//     }
+
+//     pageHeader() {
+//         if (this.state.currentContestId) {
+//             return this.currentContest().contestName;
+//         }
+//         return 'Naming Contests!';
+//     }
+//     // then change it everywhere we have 'pageHeader'
+
+//     currentContent() {
+//         if(this.state.currentContestId) {
+//             // extract this long line into its own method, 'currentContest'
+//             return <Contest {...this.currentContest()} />;
+//         }
+//         return <ContestList
+//                 onContestClick={this.fetchContest}
+//                 contests={this.state.contests} />;
+//     }
+
+//     render() {
+//         return (
+//             <div className="App">
+//                 {/* <Header message={this.state.pageHeader} /> */}
+//                 {/* now read this ^ from the method instead of the state */}
+//                 <Header message={this.pageHeader()} />
+//                     {this.currentContent()}
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+
+
+/**************************************************************/
+/***** 26. Navigating to the main page (list of contests) *****/
+/**************************************************************/
+
 class App extends React.Component {
-    static propTypes = { // using this since we have a class, so propTypes can just be a static property
+    static propTypes = {
         initialData: PropTypes.object.isRequired
     };
-    // state = { 
-    //     // pageHeader: 'Naming Contests!', // <-- can be computed, don't need it on the state
-    //     // so remove from state and create function
-
-    //     contests: this.props.initialContests
-    //     // ^ we're actually getting the initial data itself from ./Contest.js
-    //     // which is actually top level, so the whole state 'state ={...}'
-    //     // will be initiated as: this.props.initialData
-    //  };
-    state = this.props.initialData; // also need to define the type for this data above
+    state = this.props.initialData;
      componentDidMount() {
      }
      componentWillUnmount() {
@@ -865,13 +933,25 @@ class App extends React.Component {
         );
         api.fetchContest(contestId).then(contest => {
             this.setState({
-                // pageHeader: contest.contestName,
-                // no need to set ^ as state here, since computed as a method
                 currentContestId: contest.id,
                 contests: {
                     ...this.state.contests,
                     [contest.id]: contest
                 }
+            });
+        });
+    };
+
+    // fetch from src/api.js
+    fetchContestList = () => {
+        pushState(
+            { currentContestId: null },
+            '/' // need to push the new url, /, to the state
+        );
+        api.fetchContestList().then(contests => {
+            this.setState({ // resetting the UI of the state ***
+                currentContestId: null,
+                contests // <-- put the whole object on the state
             });
         });
     };
@@ -886,12 +966,13 @@ class App extends React.Component {
         }
         return 'Naming Contests!';
     }
-    // then change it everywhere we have 'pageHeader'
 
     currentContent() {
         if(this.state.currentContestId) {
-            // extract this long line into its own method, 'currentContest'
-            return <Contest {...this.currentContest()} />;
+            return <Contest
+                contestListClick={this.fetchContestList}
+                // ^ fetch the list from src/api.js by directly using the fetchContestList function from above
+                {...this.currentContest()} />;
         }
         return <ContestList
                 onContestClick={this.fetchContest}
@@ -901,8 +982,6 @@ class App extends React.Component {
     render() {
         return (
             <div className="App">
-                {/* <Header message={this.state.pageHeader} /> */}
-                {/* now read this ^ from the method instead of the state */}
                 <Header message={this.pageHeader()} />
                     {this.currentContent()}
             </div>
