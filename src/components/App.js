@@ -917,15 +917,112 @@ const pushState = (obj, url) =>
 /***** 26. Navigating to the main page (list of contests) *****/
 /**************************************************************/
 
+// class App extends React.Component {
+//     static propTypes = {
+//         initialData: PropTypes.object.isRequired
+//     };
+//     state = this.props.initialData;
+//      componentDidMount() {
+//      }
+//      componentWillUnmount() {
+//      }
+//     fetchContest = (contestId) => {
+//         pushState(
+//             { currentContestId: contestId },
+//             `/contest/${contestId}`
+//         );
+//         api.fetchContest(contestId).then(contest => {
+//             this.setState({
+//                 currentContestId: contest.id,
+//                 contests: {
+//                     ...this.state.contests,
+//                     [contest.id]: contest
+//                 }
+//             });
+//         });
+//     };
+
+//     // fetch from src/api.js
+//     fetchContestList = () => {
+//         pushState(
+//             { currentContestId: null },
+//             '/' // need to push the new url, /, to the state
+//         );
+//         api.fetchContestList().then(contests => {
+//             this.setState({ // resetting the UI of the state ***
+//                 currentContestId: null,
+//                 contests // <-- put the whole object on the state
+//             });
+//         });
+//     };
+
+//     currentContest() {
+//         return this.state.contests[this.state.currentContestId];
+//     }
+
+//     pageHeader() {
+//         if (this.state.currentContestId) {
+//             return this.currentContest().contestName;
+//         }
+//         return 'Naming Contests!';
+//     }
+
+//     currentContent() {
+//         if(this.state.currentContestId) {
+//             return <Contest
+//                 contestListClick={this.fetchContestList}
+//                 // ^ fetch the list from src/api.js by directly using the fetchContestList function from above
+//                 {...this.currentContest()} />;
+//         }
+//         return <ContestList
+//                 onContestClick={this.fetchContest}
+//                 contests={this.state.contests} />;
+//     }
+
+//     render() {
+//         return (
+//             <div className="App">
+//                 <Header message={this.pageHeader()} />
+//                     {this.currentContent()}
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+
+
+/**************************************************/
+/***** 27. Handling the browser's back button *****/
+/**************************************************/
+
+// extract onpopstate handler
+const onPopState = handler => {
+    window.onpopstate = handler;
+}
+
 class App extends React.Component {
     static propTypes = {
         initialData: PropTypes.object.isRequired
     };
     state = this.props.initialData;
-     componentDidMount() {
-     }
-     componentWillUnmount() {
-     }
+    componentDidMount() {
+        //  window.onpopstate = (event) => {
+        //     console.log(event);
+        //  } // but instead of this, use the handler created above:
+        onPopState((event) => {
+            this.setState({
+                currentContestId: (event.state || {}).currentContestId
+                // read event.state, and if the state is null, then initialize with empty object
+                // then read the currentContestId
+            });
+        });
+    }
+    componentWillUnmount() {
+    // need to clear the event that registered on the onPopState from 'componentDidMount'
+    // since component can change after navigating to a page (and before clikcing on back/fwd):
+        onPopState(null);
+    }
     fetchContest = (contestId) => {
         pushState(
             { currentContestId: contestId },
@@ -946,12 +1043,12 @@ class App extends React.Component {
     fetchContestList = () => {
         pushState(
             { currentContestId: null },
-            '/' // need to push the new url, /, to the state
+            '/'
         );
         api.fetchContestList().then(contests => {
-            this.setState({ // resetting the UI of the state ***
+            this.setState({
                 currentContestId: null,
-                contests // <-- put the whole object on the state
+                contests
             });
         });
     };
@@ -971,7 +1068,6 @@ class App extends React.Component {
         if(this.state.currentContestId) {
             return <Contest
                 contestListClick={this.fetchContestList}
-                // ^ fetch the list from src/api.js by directly using the fetchContestList function from above
                 {...this.currentContest()} />;
         }
         return <ContestList
@@ -990,3 +1086,4 @@ class App extends React.Component {
 }
 
 export default App;
+
