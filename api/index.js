@@ -83,7 +83,7 @@
 /*****************************************/
 
 import express from 'express';
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectID } from 'mongodb'; // (32. _id change)
 import assert from 'assert'; // to make sure we're not getting any errors when we connect
 import config from '../config' // need to import configuration whenever connecting to mongo
 
@@ -104,7 +104,7 @@ router.get('/contests', (req, res) => {
     // so find all documents in mongo:
     mdb.db('test').collection('contests').find({}) // gives us a promise
         .project({ // 3.) only project category and contest names ('1' for the fields we want to be included)
-            id: 1,
+            // id: 1, // (32. _id change)
             categoryName: 1,
             contestName: 1
         })
@@ -117,7 +117,8 @@ router.get('/contests', (req, res) => {
                 // is reading the information (i.e. our API structure says contests == list of contests)
                 return;
             }
-            contests[contest.id] = contest; // add it to empty object created above, since this is async
+            contests[contest._id] = contest; // add it to empty object created above, since this is async
+            // (32. _id change)
         });
         // test in browser: http://localhost:8080/api/contests (see all contest information)
 });
@@ -125,7 +126,8 @@ router.get('/contests', (req, res) => {
 router.get('/contests/:contestId', (req, res) => {
     // 4.) find one from database by id
     mdb.db('test').collection('contests')
-        .findOne({ id: Number(req.params.contestId) }) // convert string into number
+        .findOne({ _id: ObjectID(req.params.contestId) }) // convert string into number
+        // ^ (32. _id change)
         .then(contest => res.send(contest))
         .catch(console.error);
     // test in browser: http://localhost:8080/api/contests/4
@@ -140,9 +142,9 @@ router.get('/contests/:contestId', (req, res) => {
 
 // need an api endpoint to fetch the list of names
 router.get('/names/:nameIds', (req, res) => {
-    const nameIds = req.params.nameIds.split(',').map(Number);
+    const nameIds = req.params.nameIds.split(',').map(ObjectID); // (32. _id change)
     let names = {};
-    mdb.db('test').collection('names').find({ id: { $in: nameIds }})
+    mdb.db('test').collection('names').find({ _id: { $in: nameIds }}) // (32. _id change)
     // ^ 'id...' = syntax to find list of names based on array
     // basically says: find all the names for all the id's that we passed to the api
         .each((err, name) => {
@@ -152,7 +154,8 @@ router.get('/names/:nameIds', (req, res) => {
                 res.send({ names });
                 return;
             }
-            names[name.id] = name;
+            names[name._id] = name;
+            // (32. _id change)
         });
         // test in browser: http://localhost:8080/api/names/101,102
 });

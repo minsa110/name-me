@@ -117,14 +117,14 @@ const getApiUrl = contestId => {
 const getInitialData = (contestId, apiData) => {
     if (contestId) {
         return { // if we have the contestId, return an OBJECT of the current contest ID
-            currentContestId: apiData.id, // here, apiData is a single object that represents a single contest
+            currentContestId: apiData._id, // here, apiData is a single object that represents a single contest
             // but also need to render the list of contests here (e.g. contests: [])
             // since React application calculates the current contest from the current contest ID (see 'currentContest()' from App.js)
             // but since 'apiData' is for a single object...
             // FAKE IT by returning an object with just ONE contest that represents the current contest:
             contests: {
-                [apiData.id]: apiData
-            }
+                [apiData._id]: apiData
+            } // ^ (32. _id change)
         }
     }
     return { // default case = return the list of contests

@@ -1030,11 +1030,12 @@ class App extends React.Component {
         );
         api.fetchContest(contestId).then(contest => {
             this.setState({
-                currentContestId: contest.id,
+                currentContestId: contest._id,
                 contests: {
                     ...this.state.contests,
-                    [contest.id]: contest
+                    [contest._id]: contest
                 }
+                // ^ (32. _id change)
             });
         });
     };

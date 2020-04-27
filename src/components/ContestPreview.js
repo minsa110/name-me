@@ -83,8 +83,9 @@ import PropTypes from 'prop-types';
 class ContestPreview extends Component {
     handleClick = () => {
         // call the onClick property here in the function:
-        this.props.onClick(this.props.id); // and send as an argument, 'this.props.id'
+        this.props.onClick(this.props._id); // and send as an argument, 'this.props.id'
         // ^ define id below too
+        // ^ (32. _id change)
     };
     render() {
         return (
@@ -105,7 +106,7 @@ ContestPreview.propTypes = {
     contestName: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,
     // ^ receive this new property from ./ContestList
-    id: PropTypes.number.isRequired
+    _id: PropTypes.string.isRequired // (32. _id change) when mongo's ObjectID gets exposed by the api, becomes string
 };
 
 export default ContestPreview;
