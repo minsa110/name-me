@@ -1053,37 +1053,99 @@ class App extends React.Component {
         });
     };
 
-    currentContest() {
-        return this.state.contests[this.state.currentContestId];
+    // currentContest() {
+    //     return this.state.contests[this.state.currentContestId];
+    // }
+
+    // pageHeader() {
+    //     if (this.state.currentContestId) {
+    //         return this.currentContest().contestName;
+    //     }
+    //     return 'Naming Contests!';
+    // }
+
+//     currentContent() {
+//         if(this.state.currentContestId) {
+//             return <Contest
+//                 contestListClick={this.fetchContestList}
+//                 {...this.currentContest()} />;
+//         }
+//         return <ContestList
+//                 onContestClick={this.fetchContest}
+//                 contests={this.state.contests} />;
+//     }
+
+//     render() {
+//         return (
+//             <div className="App">
+//                 <Header message={this.pageHeader()} />
+//                     {this.currentContent()}
+//             </div>
+//         );
+//     }
+// }
+
+// export default App;
+
+
+/************************************************/
+/***** 30. Displaying fetched list of names *****/
+/************************************************/
+
+// fetches the object containing names, fetchable by nameId
+fetchNames = (nameIds) => {
+    // for edge case of no names received:
+    if (nameIds.length === 0) {
+        return; // so no call to the api
     }
 
-    pageHeader() {
-        if (this.state.currentContestId) {
-            return this.currentContest().contestName;
-        }
-        return 'Naming Contests!';
-    }
+    api.fetchNames(nameIds).then(names => { // api object defined in ../api.js
+        this.setState({
+            names
+        });
+    });
+};
 
-    currentContent() {
-        if(this.state.currentContestId) {
-            return <Contest
-                contestListClick={this.fetchContestList}
-                {...this.currentContest()} />;
-        }
-        return <ContestList
-                onContestClick={this.fetchContest}
-                contests={this.state.contests} />;
-    }
+currentContest() {
+    return this.state.contests[this.state.currentContestId];
+}
 
-    render() {
-        return (
-            <div className="App">
-                <Header message={this.pageHeader()} />
-                    {this.currentContent()}
-            </div>
-        );
+pageHeader() {
+    if (this.state.currentContestId) {
+        return this.currentContest().contestName;
     }
+    return 'Naming Contests!';
+}
+
+lookupName = (nameId) => {
+    // account for the fact that the names will only be available after component did mount:
+    if (!this.state.names || !this.state.names[nameId]) {
+        return {name: '...'}; // potentially put loader / moving dots for UI to notify the user that we're still fetching the names
+    }
+    return this.state.names[nameId];
+}
+
+currentContent() {
+    if(this.state.currentContestId) {
+        return <Contest
+            contestListClick={this.fetchContestList}
+            fetchNames={this.fetchNames} // fetchNames function is defined on this instance (see above)
+            lookupName={this.lookupName}
+            {...this.currentContest()} />;
+    }
+    return <ContestList
+            onContestClick={this.fetchContest}
+            contests={this.state.contests} />;
+}
+
+render() {
+    return (
+        <div className="App">
+            <Header message={this.pageHeader()} />
+                {this.currentContent()}
+        </div>
+    );
+}
 }
 
 export default App;
-

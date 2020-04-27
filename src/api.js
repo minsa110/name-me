@@ -19,3 +19,13 @@ export const fetchContestList = () => { // no argument, thus the '()'
         .then(resp => resp.data.contests);
 }
 // then fetch contest list from here into App.js
+
+
+/************************************************/
+/***** 30. Displaying fetched list of names *****/
+/************************************************/
+
+export const fetchNames = nameIds => {
+    return axios.get(`/api/names/${nameIds.join(',')}`)
+        .then(resp => resp.data.names);
+}

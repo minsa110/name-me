@@ -56,8 +56,19 @@ import PropTypes from 'prop-types';
 /*****************************************************/
 /***** 29. Creating API to fetch a list of names *****/
 /*****************************************************/
+// ^ only made html changes ^
+
+/************************************************/
+/***** 30. Displaying fetched list of names *****/
+/************************************************/
 
 class Contest extends Component {
+    componentDidMount() {
+        // fetch names when clicked on contest only
+        // but don't want to do it separately here... instead, do in App.js
+        // and just call the function here:
+        this.props.fetchNames(this.props.nameIds);
+    }
     render() {
       return (
         <div className="Contest">
@@ -78,8 +89,13 @@ class Contest extends Component {
             </div>
             <div className="panel-body">
               <ul className="list-group">
-                <li className="list-group-item">Name one...</li>
-                <li className="list-group-item">Name two...</li>
+                {this.props.nameIds.map(nameId =>
+                    <li key={nameId} className="list-group-item">
+                    {/* remember, need to provide key since we have a dynamic array */}
+                        {this.props.lookupName(nameId).name}
+                        {/* 'this.props.lookupName(nameId)' is an object */}
+                    </li>
+                )}
               </ul>
             </div>
           </div>
@@ -111,7 +127,10 @@ class Contest extends Component {
 
 Contest.propTypes = {
     description: PropTypes.string.isRequired,
-    contestListClick: PropTypes.func.isRequired
+    contestListClick: PropTypes.func.isRequired,
+    fetchNames: PropTypes.func.isRequired,
+    nameIds: PropTypes.array.isRequired,
+    lookupName: PropTypes.func.isRequired
 };
 
 export default Contest;
