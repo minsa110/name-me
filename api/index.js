@@ -131,4 +131,31 @@ router.get('/contests/:contestId', (req, res) => {
     // test in browser: http://localhost:8080/api/contests/4
 });
 
+// export default router;
+
+
+/*****************************************************/
+/***** 29. Creating API to fetch a list of names *****/
+/*****************************************************/
+
+// need an api endpoint to fetch the list of names
+router.get('/names/:nameIds', (req, res) => {
+    const nameIds = req.params.nameIds.split(',').map(Number);
+    let names = {};
+    mdb.db('test').collection('names').find({ id: { $in: nameIds }})
+    // ^ 'id...' = syntax to find list of names based on array
+    // basically says: find all the names for all the id's that we passed to the api
+        .each((err, name) => {
+            assert.equal(null, err);
+
+            if (!name) {
+                res.send({ names });
+                return;
+            }
+            names[name.id] = name;
+        });
+        // test in browser: http://localhost:8080/api/names/101,102
+});
+
 export default router;
+
