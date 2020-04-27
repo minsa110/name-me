@@ -264,14 +264,41 @@ server.set('view engine', 'ejs');
 // });
 
 import serverRender from './serverRender';
-server.get('/', (req, res) => {
-  serverRender()
-    .then(( {initialMarkup, initialData} ) => { // need to destructure using '{}'
+// server.get('/', (req, res) => {
+//   serverRender()
+//     .then(( {initialMarkup, initialData} ) => { // need to destructure using '{}'
+//       res.render('index', {
+//         initialMarkup,
+//         initialData
+//         // ^ render both the content and the data (from axios call in ./serverRender)
+//         // then make necessary changes in views/index.ejs where we're rendering the content
+//       });
+//     })
+//     .catch(console.error);
+// });
+
+// server.use('/api', apiRouter);
+// server.use(express.static('public'));
+
+// server.listen(config.port, config.host, () => {
+//   console.info('Express listening on port', config.port);
+// });
+
+
+/****************************************************************/
+/***** 25. Server-side routing for individual contest pages *****/
+/****************************************************************/
+
+server.get(['/', '/contest/:contestId'], (req, res) => {
+  // ^ also handle '/contest' case
+  // so, pass multiple routes (can do this in Express) using '[]'
+  // and use conditional logic using req.params.contestId:
+  serverRender(req.params.contestId) // <-- pass in the contest ID to serverRender in ./serverRender.js
+  // in serverRender.js, used in functions: 'getApiUrl' and 'getInitialData'
+    .then(( {initialMarkup, initialData} ) => {
       res.render('index', {
         initialMarkup,
         initialData
-        // ^ render both the content and the data (from axios call in ./serverRender)
-        // then make necessary changes in views/index.ejs where we're rendering the content
       });
     })
     .catch(console.error);

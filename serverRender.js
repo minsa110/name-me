@@ -76,25 +76,81 @@ import App from './src/components/App';
 /***** 24. Code refactoring *****/
 /********************************/
 
-const serverRender =() =>
-    axios.get(`${config.serverUrl}/api/contests`)
+// const serverRender =() =>
+//     axios.get(`${config.serverUrl}/api/contests`)
+//     .then(resp => {
+//         return {
+//             initialMarkup: ReactDOMServer.renderToString(
+//                 // <App initialContests={resp.data.contests} />
+//                 // ^ actually not a valid way of passing in the data
+//                 // because initial structure of the data for when refreshing the main page
+//                 // is diff. from refreshing the contest page
+//                 // SO, instead of passing in the initial contests,
+//                 // need to pass the INITIAL DATA itself!:
+//                 <App initialData={resp.data} />
+//                 // ^ this way, we can control the initial structure that we pass to the App component
+//                 // and it can account for EITHER list of contests or a current contest
+
+//                 // to make THAT happen, need to change our app in ./src/index.js
+//             ),
+//             initialData: resp.data
+//         };
+//     });
+    
+// export default serverRender;
+
+
+/****************************************************************/
+/***** 25. Server-side routing for individual contest pages *****/
+/****************************************************************/
+
+// get the api url based on the contest ID
+const getApiUrl = contestId => {
+    if (contestId) {
+        return `${config.serverUrl}/api/contests/${contestId}` // append current contest ID
+    }
+    return `${config.serverUrl}/api/contests`;
+}
+
+// read the initial data that we want based on what we're requesting,
+// based on the contest ID and api data (retrieved from serverRender below)
+const getInitialData = (contestId, apiData) => {
+    if (contestId) {
+        return { // if we have the contestId, return an OBJECT of the current contest ID
+            currentContestId: apiData.id, // here, apiData is a single object that represents a single contest
+            // but also need to render the list of contests here (e.g. contests: [])
+            // since React application calculates the current contest from the current contest ID (see 'currentContest()' from App.js)
+            // but since 'apiData' is for a single object...
+            // FAKE IT by returning an object with just ONE contest that represents the current contest:
+            contests: {
+                [apiData.id]: apiData
+            }
+        }
+    }
+    return { // default case = return the list of contests
+        contests: apiData.contests
+    };
+};
+
+const serverRender = (contestId) =>
+// 'contestId' passed in from ./server.js
+// and based on that, the url and the data will be different
+// so create functions (see above) and use them below
+    axios.get(getApiUrl(contestId)) // 'contestId' will be 'undefined' -- see ./server.js
     .then(resp => {
+        const initialData = getInitialData(contestId, resp.data);
+        // ^ then use this below in <App...> and in 'initialData'
         return {
             initialMarkup: ReactDOMServer.renderToString(
-                // <App initialContests={resp.data.contests} />
-                // ^ actually not a valid way of passing in the data
-                // because initial structure of the data for when refreshing the main page
-                // is diff. from refreshing the contest page
-                // SO, instead of passing in the initial contests,
-                // need to pass the INITIAL DATA itself!:
-                <App initialData={resp.data} />
-                // ^ this way, we can control the initial structure that we pass to the App component
-                // and it can account for EITHER list of contests or a current contest
-
-                // to make THAT happen, need to change our app in ./src/index.js
+                <App initialData={initialData} />
             ),
-            initialData: resp.data
+            // initialData: resp.data
+            initialData // same as initialData: initialData
         };
     });
     
 export default serverRender;
+
+// SO... now, if refreshed, the page renders the content for a single contest from the server
+// can test: curl http://localhost:8080/contest/1
+// should give us the HTML directly for that contest
