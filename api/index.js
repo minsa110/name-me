@@ -129,8 +129,12 @@ router.get('/contests/:contestId', (req, res) => {
         .findOne({ _id: ObjectID(req.params.contestId) }) // convert string into number
         // ^ (32. _id change)
         .then(contest => res.send(contest))
-        .catch(console.error);
+        // .catch(console.error);
     // test in browser: http://localhost:8080/api/contests/4
+        .catch(error => {
+            console.error(error);
+            res.status(404).send('Bad Request');
+        });
 });
 
 // export default router;
@@ -160,5 +164,84 @@ router.get('/names/:nameIds', (req, res) => {
         // test in browser: http://localhost:8080/api/names/101,102
 });
 
-export default router;
+// export default router;
 
+
+/*******************************************************/
+/***** 33. Creating API to post data to the server *****/
+/*******************************************************/
+
+// an api end point to propose a name
+router.post('/names', (req, res) => { // posting to the '/names' resource
+    // need to read the data from the body parameter of Express (req.body)
+    // since we will be sending the data for the new name as a JSON object
+    // BUT need to parse it from the request first --> use the Express middleware, body-parser:
+    // npm i -S body-parser
+    // import body-parser in server.js
+
+    // 1.) then test 'post':
+    // console.log(req.body);
+    // then in Postman:
+        // 'POST', http://localhost:8080/api/names
+        // Body --> raw --> JSON:
+            // {
+            //     "test1": 42,
+            //     "test2": 43
+            // } --> SEND
+        // shouldn't receive any response in Postman
+        // should see in server log ('npm start' with Espress listening...):
+            // { "test1": 42, "test2": 43 }
+
+    // 2.) design api:
+    // res.send(req.body);
+    // in Postman: (same as above)
+        // {
+        //     "newName": "Awesome Name",
+        //     "contestId": "5ea76c4ce448d49f869bd767" // make sure this is a real id
+        // }
+        // Postman should echo back the response to be the same
+    
+    // 3.) apply designed api:
+    const contestId = ObjectID(req.body.contestId);
+    const name = req.body.newName;
+    // validation ...
+
+    // PLAN - return updated contest information + the new name information
+    // so that the list of names will be immediately updated in the UI
+    // FIRST - insert name
+    // SECOND - update contest
+    // THIRD - read the modified contest information & return data
+        // can combine 2nd & 3rd using mongo's findAndModify
+
+    // FIRST step -
+    mdb.db('test').collection('names').insertOne({ name }).then(result =>
+        // SECOND & THIRD steps -
+        mdb.db('test').collection('contests').findAndModify(
+            { _id: contestId }, // 1st arg: query that we want to find an obj for
+            [], // 2nd arg: sort, in case the 1st arg returned many records, how to sort to pick the first element to modify
+            { $push: { nameIds: result.insertedId } }, // 3rd arg: what needs to be modified
+                // ^ modify nameId's property in the contest && push the newly generated nameId
+                // push an object ('{}')
+                // push to 'nameIds' field... the newly generated name ID (which we can read from the result object in the promise)
+                // the insertedId will have the automatically generated _id object
+            { new: true } // 4th arg: specify option (new: true so that findAndModify call will return the updated document)
+        ).then(doc => // this findAndModify also returns a promise that exposes the document
+            res.send({ // respond with data
+                updatedContest: doc.value, // the actual doc we updated
+                newName: { _id: result.insertedId, name } // new name object
+            })
+        )
+    )
+    .catch(error => {
+        console.error(error);
+        res.status(404).send('Bad Request');
+    });
+    // in Postman: (same as above)
+    // {
+    //     "newName": "Awesome Name",
+    //     "contestId": "5ea76c4ce448d49f869bd767" // make sure this is a real id
+    // }
+    // should get back newName and its associated _id in the 'nameIds' field in 'updatedContest'
+});
+
+export default router;

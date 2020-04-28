@@ -205,21 +205,21 @@
 /***** 18. Fetch data from a separate api server *****/
 /*****************************************************/
 
-import config from './config';
-import apiRouter from './api';
-import sassMiddleware from 'node-sass-middleware';
-import path from 'path';
+// import config from './config';
+// import apiRouter from './api';
+// import sassMiddleware from 'node-sass-middleware';
+// import path from 'path';
 
-import express from 'express';
-const server = express();
+// import express from 'express';
+// const server = express();
 
 // to use sass...
-server.use(sassMiddleware({
-    src: path.join(__dirname, 'sass'),
-    dest: path.join(__dirname, 'public')
-}));
+// server.use(sassMiddleware({
+//     src: path.join(__dirname, 'sass'),
+//     dest: path.join(__dirname, 'public')
+// }));
 
-server.set('view engine', 'ejs');
+// server.set('view engine', 'ejs');
 
 // import './serverRender'
 // server.get('/', (req, res) => {
@@ -241,7 +241,7 @@ server.set('view engine', 'ejs');
 /***** 19. Render React components on the server using fetched API data using the ReactDOMServer package *****/
 /*************************************************************************************************************/
 
-server.set('view engine', 'ejs');
+// server.set('view engine', 'ejs');
 
 // import serverRender from './serverRender'; // import the default export instead of the file itself
 // server.get('/', (req, res) => {
@@ -263,7 +263,7 @@ server.set('view engine', 'ejs');
 //   console.info('Express listening on port', config.port);
 // });
 
-import serverRender from './serverRender';
+// import serverRender from './serverRender';
 // server.get('/', (req, res) => {
 //   serverRender()
 //     .then(( {initialMarkup, initialData} ) => { // need to destructure using '{}'
@@ -316,12 +316,59 @@ import serverRender from './serverRender';
 /***** 32. Changing UI to use MongoDB's _id *****/
 /************************************************/
 
+// server.get(['/', '/contest/:contestId'], (req, res) => {
+//   // ^ also handle '/contest' case
+//   // so, pass multiple routes (can do this in Express) using '[]'
+//   // and use conditional logic using req.params.contestId:
+//   serverRender(req.params.contestId) // <-- pass in the contest ID to serverRender in ./serverRender.js
+//   // in serverRender.js, used in functions: 'getApiUrl' and 'getInitialData'
+//     .then(( {initialMarkup, initialData} ) => {
+//       res.render('index', {
+//         initialMarkup,
+//         initialData
+//       });
+//     })
+//     .catch(error => {
+//       // res.send(error.toString()); // show the error in UI
+//       // but should send 404 instead:
+//       console.error(error);
+//       res.status(404).send('Bad Request');
+//     });
+// });
+
+// server.use('/api', apiRouter);
+// server.use(express.static('public'));
+
+// server.listen(config.port, config.host, () => {
+//   console.info('Express listening on port', config.port);
+// });
+
+
+/*******************************************************/
+/***** 33. Creating API to post data to the server *****/
+/*******************************************************/
+
+import config from './config';
+import apiRouter from './api';
+import sassMiddleware from 'node-sass-middleware';
+import path from 'path';
+import serverRender from './serverRender';
+import bodyParser from 'body-parser';
+
+import express from 'express';
+const server = express();
+
+server.use(bodyParser.json());
+
+server.use(sassMiddleware({
+  src: path.join(__dirname, 'sass'),
+  dest: path.join(__dirname, 'public')
+}));
+
+server.set('view engine', 'ejs');
+
 server.get(['/', '/contest/:contestId'], (req, res) => {
-  // ^ also handle '/contest' case
-  // so, pass multiple routes (can do this in Express) using '[]'
-  // and use conditional logic using req.params.contestId:
-  serverRender(req.params.contestId) // <-- pass in the contest ID to serverRender in ./serverRender.js
-  // in serverRender.js, used in functions: 'getApiUrl' and 'getInitialData'
+  serverRender(req.params.contestId)
     .then(( {initialMarkup, initialData} ) => {
       res.render('index', {
         initialMarkup,
@@ -329,8 +376,6 @@ server.get(['/', '/contest/:contestId'], (req, res) => {
       });
     })
     .catch(error => {
-      // res.send(error.toString()); // show the error in UI
-      // but should send 404 instead:
       console.error(error);
       res.status(404).send('Bad Request');
     });
