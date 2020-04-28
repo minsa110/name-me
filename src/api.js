@@ -29,3 +29,13 @@ export const fetchNames = nameIds => {
     return axios.get(`/api/names/${nameIds.join(',')}`)
         .then(resp => resp.data.names);
 }
+
+
+/**************************************************/
+/***** 34. Wiring proposed new FORM to the UI *****/
+/**************************************************/
+
+export const addName = (newName, contestId) => {
+    return axios.post('/api/names', { newName, contestId }) // axios sends 2nd arg as JSON
+        .then(resp => resp.data);
+};

@@ -1126,12 +1126,62 @@ lookupName = (nameId) => {
     return this.state.names[nameId];
 }
 
+// currentContent() {
+//     if(this.state.currentContestId) {
+//         return <Contest
+//             contestListClick={this.fetchContestList}
+//             fetchNames={this.fetchNames} // fetchNames function is defined on this instance (see above)
+//             lookupName={this.lookupName}
+//             {...this.currentContest()} />;
+//     }
+//     return <ContestList
+//             onContestClick={this.fetchContest}
+//             contests={this.state.contests} />;
+// }
+
+// render() {
+//     return (
+//         <div className="App">
+//             <Header message={this.pageHeader()} />
+//                 {this.currentContent()}
+//         </div>
+//     );
+// }
+// }
+
+// export default App;
+
+
+/**************************************************/
+/***** 34. Wiring proposed new FORM to the UI *****/
+/**************************************************/
+
+addName = (newName, contestId) => {
+    // define the api in src/api.js and call it:
+    api.addName(newName, contestId).then(resp => 
+        this.setState({
+            // changes the nameIds array:
+            contests: {
+                ...this.state.contests, // start with current list of contests
+                [resp.updatedContest._id]: resp.updatedContest // then include this newly updated contest (use dynamic ID)
+            },
+            // change names object to read the name from the _id's
+            names: {
+                ...this.state.names,
+                [resp.newName._id]: resp.newName
+            }
+        })
+    )
+    .catch(console.error);
+};
+
 currentContent() {
     if(this.state.currentContestId) {
         return <Contest
             contestListClick={this.fetchContestList}
             fetchNames={this.fetchNames} // fetchNames function is defined on this instance (see above)
             lookupName={this.lookupName}
+            addName={this.addName}
             {...this.currentContest()} />;
     }
     return <ContestList
