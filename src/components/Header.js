@@ -1,4 +1,4 @@
-import React from 'react'; // need to import because of the <h2> (which is a React component)
+import React from 'react';
 import PropTypes from 'prop-types';
 
 const Header = ({ message }) => {
@@ -13,4 +13,4 @@ Header.propTypes = {
     message: PropTypes.string
 };
 
-export default Header; // for other modules to use this Header module
+export default Header;

@@ -1,7 +1,3 @@
-/***********************************************************************/
-/***** 31. Script to use MongoDB’s auto-generated ObjectId’s (_id) *****/
-/***********************************************************************/
-
 import { MongoClient } from 'mongodb';
 import assert from 'assert';
 import config from './config';
@@ -34,21 +30,3 @@ MongoClient.connect(config.mongodbUri, { useUnifiedTopology: true }, (err, clien
   });
 
 });
-
-// update using this script in terminal: babel-node updateTestData.js
-
-
-/************************************************/
-/***** 32. Changing UI to use MongoDB's _id *****/
-/************************************************/
-
-// find out which files need to be changed in terminal: git grep "\.id"
-// then change in all files shown (32. _id change):
-    // ./api/index.js
-    // ./serverRender.js
-    // ./src/components/App.js
-    // ./src/components/ContestPreview.js
-// then first test api's (make sure they're indexing by _id):
-    // http://localhost:8080/api/contests
-    // http://localhost:8080/api/contests/5ea754b6e8892f9a59968d30
-    // http://localhost:8080/api/names/5ea75227c485419a13a94978,5ea75227c485419a13a94979
