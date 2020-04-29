@@ -1,6 +1,6 @@
 # Naming Contests! :pencil2:
 
-An application that hosts multiple naming contests--click on a contest and sugest a name! :thumbsup:
+An application that hosts multiple naming contests--click on a contest and suggest a name! :thumbsup:
 
 :pushpin: **Description & implemented technologies:**  
 
