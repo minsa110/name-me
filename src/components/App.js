@@ -56,74 +56,78 @@ class App extends React.Component {
         });
     };
 
-fetchNames = (nameIds) => {
-    if (nameIds.length === 0) {
-        return;
-    }
+    fetchNames = (nameIds) => {
+        if (nameIds.length === 0) {
+            return;
+        }
 
-    api.fetchNames(nameIds).then(names => {
-        this.setState({
-            names
+        api.fetchNames(nameIds).then(names => {
+            this.setState({
+                names
+            });
         });
-    });
-};
+    };
 
-currentContest() {
-    return this.state.contests[this.state.currentContestId];
-}
+    currentContest() {
+        return this.state.contests[this.state.currentContestId];
+    };
 
-pageHeader() {
-    if (this.state.currentContestId) {
-        return this.currentContest().contestName;
+    pageHeader() {
+        if (this.state.currentContestId) {
+            return this.currentContest().contestName;
+        }
+        return 'Naming Contests!';
+    };
+
+    lookupName = (nameId) => {
+        if (!this.state.names || !this.state.names[nameId]) {
+            return {name: '...'};
+        }
+        return this.state.names[nameId];
+    };
+
+    addName = (newName, contestId) => {
+        if (newName == "") {
+            alert("Please type your suggested name before clicking on 'Submit'");
+        } else {
+            api.addName(newName, contestId).then(resp => 
+                this.setState({
+                    contests: {
+                        ...this.state.contests,
+                        [resp.updatedContest._id]: resp.updatedContest
+                    },
+                    names: {
+                        ...this.state.names,
+                        [resp.newName._id]: resp.newName
+                    }
+                })
+            )
+            .catch(console.error);
+        }
+    };
+
+    currentContent() {
+        if(this.state.currentContestId) {
+            return <Contest
+                contestListClick={this.fetchContestList}
+                fetchNames={this.fetchNames}
+                lookupName={this.lookupName}
+                addName={this.addName}
+                {...this.currentContest()} />;
+        }
+        return <ContestList
+                onContestClick={this.fetchContest}
+                contests={this.state.contests} />;
+    };
+
+    render() {
+        return (
+            <div className="App">
+                <Header message={this.pageHeader()} />
+                    {this.currentContent()}
+            </div>
+        );
     }
-    return 'Naming Contests!';
-}
-
-lookupName = (nameId) => {
-    if (!this.state.names || !this.state.names[nameId]) {
-        return {name: '...'};
-    }
-    return this.state.names[nameId];
-}
-
-addName = (newName, contestId) => {
-    api.addName(newName, contestId).then(resp => 
-        this.setState({
-            contests: {
-                ...this.state.contests,
-                [resp.updatedContest._id]: resp.updatedContest
-            },
-            names: {
-                ...this.state.names,
-                [resp.newName._id]: resp.newName
-            }
-        })
-    )
-    .catch(console.error);
-};
-
-currentContent() {
-    if(this.state.currentContestId) {
-        return <Contest
-            contestListClick={this.fetchContestList}
-            fetchNames={this.fetchNames}
-            lookupName={this.lookupName}
-            addName={this.addName}
-            {...this.currentContest()} />;
-    }
-    return <ContestList
-            onContestClick={this.fetchContest}
-            contests={this.state.contests} />;
-}
-
-render() {
-    return (
-        <div className="App">
-            <Header message={this.pageHeader()} />
-                {this.currentContent()}
-        </div>
-    );
-}
 }
 
 export default App;
